@@ -47,7 +47,8 @@
     </form>
   </div>
 
-   <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10 mt-10">
+  <!-- Gráfico -->
+  <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10 mt-10">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-semibold">📈 Resultados (médias reais)</h2>
       <button id="btnAtualizar" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
@@ -57,7 +58,24 @@
     <canvas id="graficoResultados" height="120"></canvas>
   </div>
 
-  <script>
+  <!-- Firebase + lógica -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // 🔹 Troque pelos dados do seu projeto Firebase
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_PROJETO.firebaseapp.com",
+      projectId: "SEU_PROJETO",
+      storageBucket: "SEU_PROJETO.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const todosColegas = ["Keila","Ariel","Dante","Alex","Sayonara","Rafael","Marcus","Jaqueline","Glaucio","Lucélio","Eduardo"];
     const opcoes5 = ["Muito Insatisfatório","Insatisfatório","Regular","Satisfatório","Muito Satisfatório"];
     const valores5 = [1,2,3,4,5];
@@ -71,7 +89,7 @@
       return html;
     }
 
-    // --- Gerente ---
+    // --- Perguntas ---
     const perguntasGerente = [
       { id:"mobilizar", txt:"Como você avalia a capacidade do gerente de mobilizar e envolver a equipe?" },
       { id:"feedback", txt:"Exerce o feedback, praticando o elogio e a crítica, reconhecendo e compartilhando resultados com a equipe." },
@@ -89,7 +107,6 @@
     document.getElementById("gerente-container").innerHTML =
       perguntasGerente.map(p => criarSelect("gerente_"+p.id, p.txt, true)).join("");
 
-    // --- Chefes ---
     const perguntasChefe = [
       { id:"mobilizar", txt:"Como você avalia a capacidade do chefe de núcleo de mobilizar e envolver a equipe?" },
       { id:"visao", txt:"O chefe de núcleo demonstra uma visão clara das estratégias da equipe?" },
@@ -104,7 +121,6 @@
     renderChefe("maycon-container","Maycon");
     renderChefe("luciane-container","Luciane");
 
-    // --- Colegas ---
     const perguntasColegas = [
       {id:"colab", txt:"Como você avalia a sua colaboração comigo em projetos e atividades da equipe?"},
       {id:"positivo", txt:"Você sente que eu contribuo de maneira positiva para o trabalho em equipe?"},
@@ -131,87 +147,50 @@
     const labels = ["Gerente","Maycon","Luciane",...todosColegas];
     const grafico = new Chart(ctx, {
       type: "bar",
-      data: {
-        labels,
-        datasets: [{ label:"Média", data:Array(labels.length).fill(0), backgroundColor:"rgba(79,70,229,0.6)" }]
-      },
-      options: { scales: { y: { beginAtZero: true, max: 5 } } }
+      data: { labels, datasets:[{label:"Média",data:Array(labels.length).fill(0),backgroundColor:"rgba(79,70,229,0.6)"}]},
+      options: { scales: { y: { beginAtZero:true, max:5 } } }
     });
 
     async function atualizarGrafico() {
-      try {
-        const resp = await fetch("https://avaliacaogti.onrender.com/resultados");
-        const dados = await resp.json();
-        grafico.data.datasets[0].data = labels.map(l => dados[l] || 0);
-        grafico.update();
-      } catch (err) {
-        console.error("Erro ao buscar resultados:", err);
-      }
-    }
+      const snap = await getDocs(collection(db, "respostas"));
+      const linhas = snap.docs.map(d => d.data());
 
-
-      // botão manual de atualizar
-  document.getElementById("btnAtualizar").addEventListener("click", atualizarGrafico);
-
-  // já atualiza uma vez ao carregar a página
-  atualizarGrafico();
-    
-  // Importa Firebase Web SDK
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "XXXX",
-    authDomain: "avaliacao360.firebaseapp.com",
-    projectId: "avaliacao360",
-    storageBucket: "avaliacao360.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  // envio do formulário
-  document.getElementById("form360").addEventListener("submit", async function(e){
-    e.preventDefault();
-    const dados = Object.fromEntries(new FormData(this).entries());
-
-    await addDoc(collection(db, "respostas"), dados);
-
-    alert("✅ Avaliação registrada!");
-    this.reset();
-    secaoColegas.style.display="none";
-    atualizarGrafico();
-  });
-
-  // carregar resultados pro gráfico
-  async function atualizarGrafico() {
-    const snap = await getDocs(collection(db, "respostas"));
-    const linhas = snap.docs.map(d => d.data());
-
-    // calcula médias
-    const soma = {}, count = {};
-    linhas.forEach(resp => {
-      for(const [k,v] of Object.entries(resp)){
-        const num = Number(v);
-        if(!isNaN(num)){
-          soma[k] = (soma[k]||0)+num;
-          count[k] = (count[k]||0)+1;
+      const soma={}, count={};
+      linhas.forEach(resp=>{
+        for(const [k,v] of Object.entries(resp)){
+          const num=Number(v);
+          if(!isNaN(num)){
+            soma[k]=(soma[k]||0)+num;
+            count[k]=(count[k]||0)+1;
+          }
         }
-      }
-    });
-    const medias = {};
-    for(const k in soma){
-      medias[k] = soma[k]/count[k];
+      });
+
+      const medias={};
+      for(const k in soma) medias[k]=soma[k]/count[k];
+
+      grafico.data.datasets[0].data = labels.map(l => medias[l]||0);
+      grafico.data.labels = labels.map(l=>{
+        const media = medias[l] ? medias[l].toFixed(1) : "0.0";
+        const qtd = count[l] || 0;
+        return `${l} (${media} • ${qtd})`;
+      });
+      grafico.update();
     }
 
-    grafico.data.datasets[0].data = labels.map(l => medias[l] || 0);
-    grafico.update();
-  }
+    // --- Enviar dados ---
+    document.getElementById("form360").addEventListener("submit", async function(e){
+      e.preventDefault();
+      const dados = Object.fromEntries(new FormData(this).entries());
+      await addDoc(collection(db,"respostas"), dados);
+      alert("✅ Avaliação registrada!");
+      this.reset(); secaoColegas.style.display="none";
+      atualizarGrafico();
+    });
 
-  atualizarGrafico();
+    document.getElementById("btnAtualizar").addEventListener("click", atualizarGrafico);
+
+    atualizarGrafico();
   </script>
 </body>
 </html>
-
