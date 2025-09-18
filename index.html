@@ -8,9 +8,9 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
   <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10">
-    <h1 class="text-3xl font-bold text-center text-indigo-700 mb-2">📊 Avaliação 360°</h1>
+    <h1 class="text-3xl font-bold text-center text-indigo-700 mb-6">📊 Avaliação 360°</h1>
     <form id="form360" class="space-y-12">
-      
+
       <!-- Identificação -->
       <section>
         <h2 class="text-2xl font-semibold mb-4">Identificação</h2>
@@ -56,10 +56,7 @@
   <script>
     const todosColegas = ["Keila","Ariel","Dante","Alex","Sayonara","Rafael","Marcus","Jaqueline","Glaucio","Lucélio","Eduardo"];
 
-    const opcoes5 = ["Muito Insatisfatório","Insatisfatório","Regular","Satisfatório","Muito Satisfatório"];
-    const valores5 = [1,2,3,4,5];
-
-    function criarSelect(name, label, obrigatorio=true, opcoes=opcoes5, valores=valores5) {
+    function criarSelect(name, label, obrigatorio=true, opcoes=["Muito Insatisfatório","Insatisfatório","Regular","Satisfatório","Muito Satisfatório"]) {
       let html = `<label class="block mb-2">${label}</label>`;
       html += `<select name="${name}" class="w-full border rounded p-2 mb-4" ${obrigatorio ? "required" : ""}>`;
       html += `<option value="">${obrigatorio ? "Selecione..." : "(Opcional) Selecione..."}</option>`;
@@ -68,63 +65,97 @@
       return html;
     }
 
-    // --- Gerente ---
-    const gerentePerguntas = [
-      "Mobilizar equipe","Feedback","Comunicação","Conflitos","Empatia","Apoio","Reconhecimento",
-      "Periodicidade feedback","Clima de confiança","Expectativas","Resolução problemas","Promoção desenvolvimento"
+    // --- Gerente (todas as perguntas completas) ---
+    const perguntasGerente = [
+      { id:"mobilizar", txt:"Como você avalia a capacidade do gerente de mobilizar e envolver a equipe?" },
+      { id:"feedback", txt:"Exerce o feedback, praticando o elogio e a crítica, reconhecendo e compartilhando resultados com a equipe." },
+      { id:"comunicacao", txt:"O gerente comunica informações de forma clara e eficiente?" },
+      { id:"conflitos", txt:"Como o gerente lida com conflitos dentro da equipe? Você se sente ouvido durante esses momentos?" },
+      { id:"empatia", txt:"O gerente demonstra respeito e empatia em suas interações com os membros da equipe?" },
+      { id:"apoio", txt:"O gerente está disponível para oferecer apoio quando necessário? Como você avalia a sua acessibilidade?" },
+      { id:"reconhecimento", txt:"O gerente reconhece e valoriza o trabalho dos servidores?" },
+      { id:"periodicidade", txt:"Você recebe feedback do seu gerente em uma periodicidade satisfatória?" },
+      { id:"confianca", txt:"Você se sente à vontade para expressar suas preocupações e opiniões ao gerente?" },
+      { id:"expectativas", txt:"O gerente comunica claramente as expectativas em relação ao seu trabalho?" },
+      { id:"resolucao", txt:"Como o gerente aborda e resolve problemas que surgem em sua equipe? Você se sente apoiado nesse processo?" },
+      { id:"desenvolvimento", txt:"O gerente incentiva oportunidades de aprendizado e desenvolvimento profissional?" }
     ];
     document.getElementById("gerente-container").innerHTML =
-      gerentePerguntas.map((p,i)=> criarSelect("gerente_"+i,p,true)).join("");
+      perguntasGerente.map(p => criarSelect("gerente_"+p.id, p.txt, true)).join("") +
+      `<label class="block mb-2">Feedback adicional sobre o gerente</label><textarea name="gerente_extra" class="w-full border rounded p-2"></textarea>`;
 
-    // --- Chefes ---
-    const chefePerguntas = ["Mobilizar equipe","Visão clara","Desenvolvimento","Tratamento","Conflitos",
-      "Diálogo","Apoio","Diretrizes","Feedback","Inclusão","Gestão conflitos","Facilitação","Empatia","Proatividade"];
-    document.getElementById("maycon-container").innerHTML =
-      "<h3 class='font-bold mb-2 text-indigo-700'>Maycon</h3>" + chefePerguntas.map((p,i)=> criarSelect("maycon_"+i,p,true)).join("");
-    document.getElementById("luciane-container").innerHTML =
-      "<h3 class='font-bold mb-2 text-indigo-700'>Luciane</h3>" + chefePerguntas.map((p,i)=> criarSelect("luciane_"+i,p,true)).join("");
+    // --- Chefes (Maycon e Luciane com todas as perguntas completas) ---
+    const perguntasChefe = [
+      { id:"mobilizar", txt:"Como você avalia a capacidade do chefe de núcleo de mobilizar e envolver a equipe?" },
+      { id:"visao", txt:"O chefe de núcleo demonstra uma visão clara das estratégias da equipe?" },
+      { id:"desenvolvimento", txt:"O chefe de núcleo incentiva o desenvolvimento profissional dos membros da equipe?" },
+      { id:"tratamento", txt:"O chefe de núcleo te trata de forma satisfatória?" },
+      { id:"conflitos", txt:"O chefe de núcleo é eficaz ao mediar conflitos?" },
+      { id:"dialogo", txt:"Você se sente confortável convidá-lo para um diálogo a respeito de suas angústias e/ou expectativas?", opcoes:["Totalmente Desconfortável","Desconfortável","Neutro","Confortável","Muito Confortável"] },
+      { id:"apoio", txt:"O chefe de núcleo oferece apoio e orientação adequados aos membros da equipe?", opcoes:["Não oferece apoio","Apoio insuficiente","Apoio adequado","Apoio bom","Apoio excelente"] },
+      { id:"diretrizes", txt:"O chefe de núcleo comunica claramente as diretrizes e expectativas para a equipe?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
+      { id:"feedback", txt:"O chefe de núcleo fornece feedback construtivo e reconhece as contribuições dos servidores?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
+      { id:"inclusao", txt:"O chefe de núcleo promove um ambiente inclusivo, onde todos se sentem valorizados e respeitados?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
+      { id:"gestao", txt:"Como o chefe de núcleo lida com conflitos dentro da equipe? Você se sente confortável trazendo problemas ou preocupações para ele(a)?", opcoes:["Totalmente Desconfortável","Desconfortável","Neutro","Confortável","Muito Confortável"] },
+      { id:"facilitacao", txt:"O chefe de núcleo incentiva e facilita o desenvolvimento profissional dos membros da equipe?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
+      { id:"empatia", txt:"O chefe de núcleo demonstra empatia e escuta ativamente as preocupações dos servidores?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
+      { id:"proatividade", txt:"O chefe de núcleo encoraja a iniciativa e a proatividade entre os servidores?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] }
+    ];
 
-    // --- Colegas ---
-    const colegasPerguntas = ["Colaboração","Comunicação","Empatia","Conflitos","Proatividade"];
-    const colegasContainer = document.getElementById("colegas-container");
-    const secaoColegas = document.getElementById("secaoColegas");
+    function renderChefe(containerId, nome){
+      document.getElementById(containerId).innerHTML =
+        `<h3 class='font-bold mb-2 text-indigo-700'>${nome}</h3>` +
+        perguntasChefe.map(p => criarSelect(nome.toLowerCase()+"_"+p.id, p.txt, true, p.opcoes || undefined)).join("") +
+        `<label class="block mb-2">Feedback adicional sobre ${nome}</label><textarea name="${nome.toLowerCase()}_extra" class="w-full border rounded p-2"></textarea>`;
+    }
+    renderChefe("maycon-container","Maycon");
+    renderChefe("luciane-container","Luciane");
+
+    // --- Colegas (perguntas opcionais) ---
+    const perguntasColegas = [
+      {id:"colab", txt:"Como você avalia a sua colaboração comigo em projetos e atividades da equipe?"},
+      {id:"positivo", txt:"Você sente que eu contribuo de maneira positiva para o trabalho em equipe?"},
+      {id:"comunicacao", txt:"Como você avalia nossa comunicação? Eu sou claro e acessível nas minhas interações?"},
+      {id:"ideias", txt:"Você se sente à vontade para compartilhar suas ideias e preocupações comigo?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"]},
+      {id:"empatia", txt:"Eu demonstro apoio e empatia em nossas interações?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"]},
+      {id:"conflitos", txt:"Como você avalia minha habilidade em lidar com conflitos ou desavenças?"},
+      {id:"problemas", txt:"Você se sente confortável trazendo problemas para mim?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"]},
+      {id:"proatividade", txt:"Você percebe que eu sou proativo e tomo iniciativa nas atividades da equipe?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"]}
+    ];
+    const colegasContainer=document.getElementById("colegas-container");
+    const secaoColegas=document.getElementById("secaoColegas");
     document.getElementById("respondente").addEventListener("change", function(){
-      const resp = this.value;
+      const resp=this.value;
       if(!resp){ secaoColegas.style.display="none"; return; }
-      const colegas = todosColegas.filter(n => n!==resp);
+      const colegas=todosColegas.filter(n=>n!==resp);
       colegasContainer.innerHTML = colegas.map(nome=>{
         return `<div class="p-4 border rounded bg-gray-50">
           <h3 class="text-lg font-medium mb-2 text-indigo-700">${nome}</h3>
-          ${colegasPerguntas.map((p,i)=> criarSelect(nome.toLowerCase()+"_"+i,p,false)).join("")}
+          ${perguntasColegas.map(p=> criarSelect(nome.toLowerCase()+"_"+p.id,p.txt,false,p.opcoes || undefined)).join("")}
+          <label class="block mb-2">Feedback adicional sobre ${nome}</label>
+          <textarea name="${nome.toLowerCase()}_extra" class="w-full border rounded p-2"></textarea>
         </div>`;
       }).join("");
       secaoColegas.style.display="block";
     });
 
-    // --- Gráfico ---
-    const ctx = document.getElementById("graficoResultados").getContext("2d");
-    const labels = ["Gerente","Maycon","Luciane",...todosColegas];
-    const grafico = new Chart(ctx, {
+    // --- Gráfico (apenas simulação por agora) ---
+    const ctx=document.getElementById("graficoResultados").getContext("2d");
+    const labels=["Gerente","Maycon","Luciane",...todosColegas];
+    const grafico=new Chart(ctx,{
       type:"bar",
-      data:{ labels, datasets:[{label:"Média", data:Array(labels.length).fill(0), backgroundColor:"rgba(79,70,229,0.6)"}]},
-      options:{ scales:{ y:{beginAtZero:true, max:5} } }
+      data:{labels:labels,datasets:[{label:"Média",data:Array(labels.length).fill(0),backgroundColor:"rgba(79,70,229,0.6)"}]},
+      options:{scales:{y:{beginAtZero:true,max:5}}}
     });
 
     // --- Submissão ---
-    document.getElementById("form360").addEventListener("submit", function(e){
+    document.getElementById("form360").addEventListener("submit",function(e){
       e.preventDefault();
-      const dados = Object.fromEntries(new FormData(this).entries());
-
-      // envia para o backend Node (Render)
-      fetch("/salvar", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify(dados)
-      }).then(r=>r.json()).then(res=>console.log("✅ Salvo:",res));
-
+      const dados=Object.fromEntries(new FormData(this).entries());
+      fetch("/salvar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(dados)})
+        .then(r=>r.json()).then(res=>console.log("✅ Salvo:",res));
       alert("✅ Avaliação registrada!");
-      this.reset();
-      secaoColegas.style.display="none";
+      this.reset(); secaoColegas.style.display="none";
     });
   </script>
 </body>
