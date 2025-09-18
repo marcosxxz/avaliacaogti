@@ -5,7 +5,7 @@ import fs from "fs";
 const app = express();
 
 // 🔹 libera o Netlify acessar
-app.use(cors({ origin: "https://avali-gti2025.netlify.app" }));
+app.use(cors());
 app.use(express.json());
 
 // 🔹 Mapeamento texto → número
@@ -85,3 +85,4 @@ app.get("/resultados", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Server rodando na porta ${PORT}`));
+
