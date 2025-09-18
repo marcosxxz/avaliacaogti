@@ -59,12 +59,12 @@
   <!-- Gráfico -->
   <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10 mt-10">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-semibold">📈 Resultados (Médias por Categoria)</h2>
+      <h2 class="text-2xl font-semibold">📈 Resultados (Média por Pessoa)</h2>
       <button id="btnAtualizar" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
         🔄 Atualizar Gráfico
       </button>
     </div>
-    <canvas id="graficoResultados" height="120"></canvas>
+    <canvas id="graficoResultados" height="140"></canvas>
   </div>
 
   <!-- Firebase + lógica -->
@@ -161,7 +161,7 @@
         plugins: { legend: { display: false }},
         scales: {
           y: { beginAtZero:true, max:5, title:{display:true,text:"Média (1 a 5)"} },
-          x: { title:{display:true,text:"Categorias Avaliadas"} }
+          x: { title:{display:true,text:"Pessoas Avaliadas"} }
         }
       }
     });
@@ -181,29 +181,30 @@
         }
       });
 
-      const medias={};
-      for(const k in soma) medias[k]=soma[k]/count[k];
-
-      const categorias = {
-        "Gerente (Márcio)": Object.entries(medias).filter(([k])=>k.startsWith("gerente_")),
-        "Chefe Maycon": Object.entries(medias).filter(([k])=>k.startsWith("maycon_")),
-        "Chefe Luciane": Object.entries(medias).filter(([k])=>k.startsWith("luciane_")),
-        "Colegas": Object.entries(medias).filter(([k])=>!/gerente_|maycon_|luciane_|respondente/.test(k)),
+      // --- Calcular média por avaliado ---
+      const avaliados = {
+        "Gerente (Márcio)": Object.entries(soma).filter(([k])=>k.startsWith("gerente_")),
+        "Maycon": Object.entries(soma).filter(([k])=>k.startsWith("maycon_")),
+        "Luciane": Object.entries(soma).filter(([k])=>k.startsWith("luciane_")),
+        ...Object.fromEntries(todosColegas.map(c=>[c, Object.entries(soma).filter(([k])=>k.startsWith(c.toLowerCase()+"_"))]))
       };
 
       const labels = [];
       const dados = [];
       const cores = [];
 
-      for(const [cat, lista] of Object.entries(categorias)){
+      for(const [nome, lista] of Object.entries(avaliados)){
         if(lista.length>0){
-          const mediaCat = lista.reduce((acc,[,v])=>acc+v,0)/lista.length;
-          labels.push(cat);
-          dados.push(mediaCat.toFixed(2));
-          if(cat.includes("Gerente")) cores.push("rgba(79,70,229,0.7)");
-          else if(cat.includes("Maycon")) cores.push("rgba(16,185,129,0.7)");
-          else if(cat.includes("Luciane")) cores.push("rgba(245,158,11,0.7)");
-          else cores.push("rgba(239,68,68,0.7)");
+          let total=0, qtd=0;
+          lista.forEach(([k])=>{
+            total+=soma[k];
+            qtd+=count[k];
+          });
+          if(qtd>0){
+            labels.push(nome);
+            dados.push((total/qtd).toFixed(2));
+            cores.push("rgba("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+",0.7)");
+          }
         }
       }
 
