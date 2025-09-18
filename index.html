@@ -26,19 +26,28 @@
       <section>
         <h2 class="text-2xl font-semibold mb-4">1. Avaliação do Gerente – Márcio Merçon</h2>
         <div id="gerente-container" class="space-y-4"></div>
+        <textarea name="feedback_gerente" placeholder="Feedback adicional sobre o gerente..."
+          class="w-full border rounded p-2 mt-4"></textarea>
       </section>
 
       <!-- Chefes -->
       <section>
         <h2 class="text-2xl font-semibold mb-4">2. Avaliação dos Chefes de Núcleo</h2>
         <div id="maycon-container" class="space-y-4 bg-gray-50 p-4 rounded"></div>
+        <textarea name="feedback_maycon" placeholder="Feedback adicional sobre o chefe Maycon..."
+          class="w-full border rounded p-2 mt-4"></textarea>
+
         <div id="luciane-container" class="space-y-4 bg-gray-50 p-4 rounded mt-6"></div>
+        <textarea name="feedback_luciane" placeholder="Feedback adicional sobre a chefe Luciane..."
+          class="w-full border rounded p-2 mt-4"></textarea>
       </section>
 
       <!-- Colegas -->
       <section id="secaoColegas" style="display:none;">
         <h2 class="text-2xl font-semibold mb-4">3. Avaliação entre Colegas</h2>
         <div id="colegas-container" class="space-y-10"></div>
+        <textarea name="feedback_colegas" placeholder="Feedback adicional sobre os colegas..."
+          class="w-full border rounded p-2 mt-4"></textarea>
       </section>
 
       <div class="text-center">
@@ -63,14 +72,15 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    // 🔹 Troque pelos dados do seu projeto Firebase
+    // ✅ Config real do seu Firebase
     const firebaseConfig = {
-      apiKey: "SUA_API_KEY",
-      authDomain: "SEU_PROJETO.firebaseapp.com",
-      projectId: "SEU_PROJETO",
-      storageBucket: "SEU_PROJETO.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abcdef"
+      apiKey: "AIzaSyB1jA-lNvKKl9hR4ISSeIsx_ykopnE07Js",
+      authDomain: "avaliacao-8505d.firebaseapp.com",
+      projectId: "avaliacao-8505d",
+      storageBucket: "avaliacao-8505d.appspot.com",
+      messagingSenderId: "876588888475",
+      appId: "1:876588888475:web:17301078d76e5f5c38f13e",
+      measurementId: "G-WVCSB91VVN"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -83,7 +93,7 @@
     function criarSelect(name, label, obrigatorio=true, opcoes=opcoes5) {
       let html = `<label class="block mb-2">${label}</label>`;
       html += `<select name="${name}" class="w-full border rounded p-2 mb-4" ${obrigatorio ? "required" : ""}>`;
-      html += `<option value="">${obrigatorio ? "Selecione..." : "(Opcional) Selecione..."}</option>`;
+      html += `<option value="">${obrigatorio ? "Selecione..." : "(Opcional)"}</option>`;
       opcoes.forEach((opt,i) => html += `<option value="${valores5[i] || i+1}">${opt}</option>`);
       html += `</select>`;
       return html;
