@@ -49,23 +49,25 @@
 
   <!-- Gráfico -->
   <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10 mt-10">
-    <h2 class="text-2xl font-semibold mb-6">📈 Resultados (médias locais)</h2>
+    <h2 class="text-2xl font-semibold mb-6">📈 Resultados (médias reais)</h2>
     <canvas id="graficoResultados" height="120"></canvas>
   </div>
 
   <script>
     const todosColegas = ["Keila","Ariel","Dante","Alex","Sayonara","Rafael","Marcus","Jaqueline","Glaucio","Lucélio","Eduardo"];
+    const opcoes5 = ["Muito Insatisfatório","Insatisfatório","Regular","Satisfatório","Muito Satisfatório"];
+    const valores5 = [1,2,3,4,5];
 
-    function criarSelect(name, label, obrigatorio=true, opcoes=["Muito Insatisfatório","Insatisfatório","Regular","Satisfatório","Muito Satisfatório"]) {
+    function criarSelect(name, label, obrigatorio=true, opcoes=opcoes5) {
       let html = `<label class="block mb-2">${label}</label>`;
       html += `<select name="${name}" class="w-full border rounded p-2 mb-4" ${obrigatorio ? "required" : ""}>`;
       html += `<option value="">${obrigatorio ? "Selecione..." : "(Opcional) Selecione..."}</option>`;
-      opcoes.forEach(opt => html += `<option>${opt}</option>`);
+      opcoes.forEach((opt,i) => html += `<option value="${valores5[i] || i+1}">${opt}</option>`);
       html += `</select>`;
       return html;
     }
 
-    // --- Gerente (todas as perguntas completas) ---
+    // --- Gerente ---
     const perguntasGerente = [
       { id:"mobilizar", txt:"Como você avalia a capacidade do gerente de mobilizar e envolver a equipe?" },
       { id:"feedback", txt:"Exerce o feedback, praticando o elogio e a crítica, reconhecendo e compartilhando resultados com a equipe." },
@@ -81,46 +83,29 @@
       { id:"desenvolvimento", txt:"O gerente incentiva oportunidades de aprendizado e desenvolvimento profissional?" }
     ];
     document.getElementById("gerente-container").innerHTML =
-      perguntasGerente.map(p => criarSelect("gerente_"+p.id, p.txt, true)).join("") +
-      `<label class="block mb-2">Feedback adicional sobre o gerente</label><textarea name="gerente_extra" class="w-full border rounded p-2"></textarea>`;
+      perguntasGerente.map(p => criarSelect("gerente_"+p.id, p.txt, true)).join("");
 
-    // --- Chefes (Maycon e Luciane com todas as perguntas completas) ---
+    // --- Chefes ---
     const perguntasChefe = [
       { id:"mobilizar", txt:"Como você avalia a capacidade do chefe de núcleo de mobilizar e envolver a equipe?" },
       { id:"visao", txt:"O chefe de núcleo demonstra uma visão clara das estratégias da equipe?" },
       { id:"desenvolvimento", txt:"O chefe de núcleo incentiva o desenvolvimento profissional dos membros da equipe?" },
-      { id:"tratamento", txt:"O chefe de núcleo te trata de forma satisfatória?" },
-      { id:"conflitos", txt:"O chefe de núcleo é eficaz ao mediar conflitos?" },
-      { id:"dialogo", txt:"Você se sente confortável convidá-lo para um diálogo a respeito de suas angústias e/ou expectativas?", opcoes:["Totalmente Desconfortável","Desconfortável","Neutro","Confortável","Muito Confortável"] },
-      { id:"apoio", txt:"O chefe de núcleo oferece apoio e orientação adequados aos membros da equipe?", opcoes:["Não oferece apoio","Apoio insuficiente","Apoio adequado","Apoio bom","Apoio excelente"] },
-      { id:"diretrizes", txt:"O chefe de núcleo comunica claramente as diretrizes e expectativas para a equipe?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
-      { id:"feedback", txt:"O chefe de núcleo fornece feedback construtivo e reconhece as contribuições dos servidores?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
-      { id:"inclusao", txt:"O chefe de núcleo promove um ambiente inclusivo, onde todos se sentem valorizados e respeitados?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
-      { id:"gestao", txt:"Como o chefe de núcleo lida com conflitos dentro da equipe? Você se sente confortável trazendo problemas ou preocupações para ele(a)?", opcoes:["Totalmente Desconfortável","Desconfortável","Neutro","Confortável","Muito Confortável"] },
-      { id:"facilitacao", txt:"O chefe de núcleo incentiva e facilita o desenvolvimento profissional dos membros da equipe?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
-      { id:"empatia", txt:"O chefe de núcleo demonstra empatia e escuta ativamente as preocupações dos servidores?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] },
-      { id:"proatividade", txt:"O chefe de núcleo encoraja a iniciativa e a proatividade entre os servidores?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"] }
+      { id:"tratamento", txt:"O chefe de núcleo te trata de forma satisfatória?" }
     ];
-
     function renderChefe(containerId, nome){
       document.getElementById(containerId).innerHTML =
         `<h3 class='font-bold mb-2 text-indigo-700'>${nome}</h3>` +
-        perguntasChefe.map(p => criarSelect(nome.toLowerCase()+"_"+p.id, p.txt, true, p.opcoes || undefined)).join("") +
-        `<label class="block mb-2">Feedback adicional sobre ${nome}</label><textarea name="${nome.toLowerCase()}_extra" class="w-full border rounded p-2"></textarea>`;
+        perguntasChefe.map(p => criarSelect(nome.toLowerCase()+"_"+p.id,p.txt,true)).join("");
     }
     renderChefe("maycon-container","Maycon");
     renderChefe("luciane-container","Luciane");
 
-    // --- Colegas (perguntas opcionais) ---
+    // --- Colegas ---
     const perguntasColegas = [
       {id:"colab", txt:"Como você avalia a sua colaboração comigo em projetos e atividades da equipe?"},
       {id:"positivo", txt:"Você sente que eu contribuo de maneira positiva para o trabalho em equipe?"},
       {id:"comunicacao", txt:"Como você avalia nossa comunicação? Eu sou claro e acessível nas minhas interações?"},
-      {id:"ideias", txt:"Você se sente à vontade para compartilhar suas ideias e preocupações comigo?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"]},
-      {id:"empatia", txt:"Eu demonstro apoio e empatia em nossas interações?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"]},
-      {id:"conflitos", txt:"Como você avalia minha habilidade em lidar com conflitos ou desavenças?"},
-      {id:"problemas", txt:"Você se sente confortável trazendo problemas para mim?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"]},
-      {id:"proatividade", txt:"Você percebe que eu sou proativo e tomo iniciativa nas atividades da equipe?", opcoes:["Nunca","Raramente","Às vezes","Frequentemente","Sempre"]}
+      {id:"ideias", txt:"Você se sente à vontade para compartilhar suas ideias e preocupações comigo?"}
     ];
     const colegasContainer=document.getElementById("colegas-container");
     const secaoColegas=document.getElementById("secaoColegas");
@@ -131,31 +116,49 @@
       colegasContainer.innerHTML = colegas.map(nome=>{
         return `<div class="p-4 border rounded bg-gray-50">
           <h3 class="text-lg font-medium mb-2 text-indigo-700">${nome}</h3>
-          ${perguntasColegas.map(p=> criarSelect(nome.toLowerCase()+"_"+p.id,p.txt,false,p.opcoes || undefined)).join("")}
-          <label class="block mb-2">Feedback adicional sobre ${nome}</label>
-          <textarea name="${nome.toLowerCase()}_extra" class="w-full border rounded p-2"></textarea>
+          ${perguntasColegas.map(p=> criarSelect(nome.toLowerCase()+"_"+p.id,p.txt,false)).join("")}
         </div>`;
       }).join("");
       secaoColegas.style.display="block";
     });
 
-    // --- Gráfico (apenas simulação por agora) ---
-    const ctx=document.getElementById("graficoResultados").getContext("2d");
-    const labels=["Gerente","Maycon","Luciane",...todosColegas];
-    const grafico=new Chart(ctx,{
-      type:"bar",
-      data:{labels:labels,datasets:[{label:"Média",data:Array(labels.length).fill(0),backgroundColor:"rgba(79,70,229,0.6)"}]},
-      options:{scales:{y:{beginAtZero:true,max:5}}}
+    // --- Gráfico ---
+    const ctx = document.getElementById("graficoResultados").getContext("2d");
+    const labels = ["Gerente","Maycon","Luciane",...todosColegas];
+    const grafico = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{ label:"Média", data:Array(labels.length).fill(0), backgroundColor:"rgba(79,70,229,0.6)" }]
+      },
+      options: { scales: { y: { beginAtZero: true, max: 5 } } }
     });
+
+    async function atualizarGrafico() {
+      try {
+        const resp = await fetch("https://avaliacaogti.onrender.com/resultados");
+        const dados = await resp.json();
+        grafico.data.datasets[0].data = labels.map(l => dados[l] || 0);
+        grafico.update();
+      } catch (err) {
+        console.error("Erro ao buscar resultados:", err);
+      }
+    }
+    atualizarGrafico();
 
     // --- Submissão ---
     document.getElementById("form360").addEventListener("submit",function(e){
       e.preventDefault();
       const dados=Object.fromEntries(new FormData(this).entries());
-      fetch("/salvar",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(dados)})
-        .then(r=>r.json()).then(res=>console.log("✅ Salvo:",res));
-      alert("✅ Avaliação registrada!");
-      this.reset(); secaoColegas.style.display="none";
+      fetch("https://avaliacaogti.onrender.com/salvar",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(dados)
+      }).then(r=>r.json()).then(res=>{
+        alert("✅ Avaliação registrada!");
+        this.reset(); secaoColegas.style.display="none";
+        atualizarGrafico();
+      });
     });
   </script>
 </body>
