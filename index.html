@@ -57,14 +57,25 @@
   </div>
 
   <!-- Gráfico -->
-  <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10 mt-10">
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-semibold">📈 Resultados (Média por Pessoa)</h2>
-      <button id="btnAtualizar" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
-        🔄 Atualizar Gráfico
-      </button>
+  <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-8 md:p-10 mt-10">
+    <div class="flex items-center justify-between mb-6 gap-4">
+      <h2 class="text-2xl font-semibold">📈 Resultados por Avaliado (Média • Nº respostas)</h2>
+      <div class="flex gap-2">
+        <button id="btnAtualizar" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+          🔄 Atualizar
+        </button>
+        <button id="btnExportar" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+          ⬇️ Exportar CSV
+        </button>
+      </div>
     </div>
-    <canvas id="graficoResultados" height="140"></canvas>
+    <canvas id="graficoResultados" height="420"></canvas>
+    <p class="text-xs text-gray-500 mt-3">Cores: 
+      <span class="text-red-600 font-semibold">≤ 2.0</span> (ruim) • 
+      <span class="text-amber-600 font-semibold">≤ 3.5</span> (médio) • 
+      <span class="text-green-600 font-semibold">&gt; 3.5</span> (bom).
+      Itens sem respostas aparecem com média 0 (cinza).
+    </p>
   </div>
 
   <!-- Firebase + lógica -->
@@ -72,7 +83,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    // ✅ Config real do seu Firebase
+    // ✅ Config real do Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyB1jA-lNvKKl9hR4ISSeIsx_ykopnE07Js",
       authDomain: "avaliacao-8505d.firebaseapp.com",
@@ -99,7 +110,7 @@
       return html;
     }
 
-    // --- Perguntas ---
+    // --- Perguntas Gerente ---
     const perguntasGerente = [
       { id:"mobilizar", txt:"Como você avalia a capacidade do gerente de mobilizar e envolver a equipe?" },
       { id:"feedback", txt:"Exerce o feedback, praticando o elogio e a crítica, reconhecendo e compartilhando resultados com a equipe." },
@@ -117,6 +128,7 @@
     document.getElementById("gerente-container").innerHTML =
       perguntasGerente.map(p => criarSelect("gerente_"+p.id, p.txt, true)).join("");
 
+    // --- Perguntas Chefes ---
     const perguntasChefe = [
       { id:"mobilizar", txt:"Como você avalia a capacidade do chefe de núcleo de mobilizar e envolver a equipe?" },
       { id:"visao", txt:"O chefe de núcleo demonstra uma visão clara das estratégias da equipe?" },
@@ -131,6 +143,7 @@
     renderChefe("maycon-container","Maycon");
     renderChefe("luciane-container","Luciane");
 
+    // --- Perguntas Colegas ---
     const perguntasColegas = [
       {id:"colab", txt:"Como você avalia a sua colaboração comigo em projetos e atividades da equipe?"},
       {id:"positivo", txt:"Você sente que eu contribuo de maneira positiva para o trabalho em equipe?"},
@@ -154,16 +167,11 @@
 
     // --- Gráfico ---
     const ctx = document.getElementById("graficoResultados").getContext("2d");
+    const labels = ["Gerente","Maycon","Luciane",...todosColegas];
     const grafico = new Chart(ctx, {
       type: "bar",
-      data: { labels: [], datasets:[{label:"Média das Avaliações",data:[],backgroundColor:[]}]},
-      options: {
-        plugins: { legend: { display: false }},
-        scales: {
-          y: { beginAtZero:true, max:5, title:{display:true,text:"Média (1 a 5)"} },
-          x: { title:{display:true,text:"Pessoas Avaliadas"} }
-        }
-      }
+      data: { labels, datasets:[{label:"Média",data:Array(labels.length).fill(0),backgroundColor:Array(labels.length).fill("rgba(107,114,128,0.5)")} ]},
+      options: { scales: { y: { beginAtZero:true, max:5 } } }
     });
 
     async function atualizarGrafico() {
@@ -175,42 +183,34 @@
         for(const [k,v] of Object.entries(resp)){
           const num=Number(v);
           if(!isNaN(num)){
-            soma[k]=(soma[k]||0)+num;
-            count[k]=(count[k]||0)+1;
+            const alvo = k.includes("gerente") ? "Gerente" :
+                         k.includes("maycon") ? "Maycon" :
+                         k.includes("luciane") ? "Luciane" :
+                         todosColegas.find(c=>k.toLowerCase().startsWith(c.toLowerCase())) || null;
+            if(alvo){
+              soma[alvo]=(soma[alvo]||0)+num;
+              count[alvo]=(count[alvo]||0)+1;
+            }
           }
         }
       });
 
-      // --- Calcular média por avaliado ---
-      const avaliados = {
-        "Gerente (Márcio)": Object.entries(soma).filter(([k])=>k.startsWith("gerente_")),
-        "Maycon": Object.entries(soma).filter(([k])=>k.startsWith("maycon_")),
-        "Luciane": Object.entries(soma).filter(([k])=>k.startsWith("luciane_")),
-        ...Object.fromEntries(todosColegas.map(c=>[c, Object.entries(soma).filter(([k])=>k.startsWith(c.toLowerCase()+"_"))]))
-      };
+      const medias={};
+      for(const k in soma) medias[k]=soma[k]/count[k];
 
-      const labels = [];
-      const dados = [];
-      const cores = [];
-
-      for(const [nome, lista] of Object.entries(avaliados)){
-        if(lista.length>0){
-          let total=0, qtd=0;
-          lista.forEach(([k])=>{
-            total+=soma[k];
-            qtd+=count[k];
-          });
-          if(qtd>0){
-            labels.push(nome);
-            dados.push((total/qtd).toFixed(2));
-            cores.push("rgba("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+",0.7)");
-          }
-        }
-      }
-
-      grafico.data.labels = labels;
-      grafico.data.datasets[0].data = dados;
-      grafico.data.datasets[0].backgroundColor = cores;
+      grafico.data.datasets[0].data = labels.map(l => medias[l]||0);
+      grafico.data.datasets[0].backgroundColor = labels.map(l=>{
+        const m = medias[l]||0;
+        if(m===0) return "rgba(107,114,128,0.5)";
+        if(m<=2) return "rgba(220,38,38,0.7)";
+        if(m<=3.5) return "rgba(234,179,8,0.7)";
+        return "rgba(34,197,94,0.7)";
+      });
+      grafico.data.labels = labels.map(l=>{
+        const media = medias[l] ? medias[l].toFixed(1) : "0.0";
+        const qtd = count[l] || 0;
+        return `${l} (${media} • ${qtd})`;
+      });
       grafico.update();
     }
 
@@ -225,6 +225,28 @@
     });
 
     document.getElementById("btnAtualizar").addEventListener("click", atualizarGrafico);
+
+    // --- Exportar CSV ---
+    async function exportarCSV() {
+      const snap = await getDocs(collection(db,"respostas"));
+      const docs = snap.docs.map(d => d.data());
+      if (!docs.length) { alert("Nenhuma resposta para exportar ainda."); return; }
+
+      const headers = [...new Set(docs.flatMap(d => Object.keys(d)))];
+      const linhas = [
+        headers.join(","),
+        ...docs.map(d => headers.map(h => JSON.stringify(d[h] || "")).join(","))
+      ];
+      const csv = linhas.join("\n");
+      const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "avaliacoes360.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    document.getElementById("btnExportar").addEventListener("click", exportarCSV);
 
     atualizarGrafico();
   </script>
