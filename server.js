@@ -4,17 +4,57 @@ import fs from "fs";
 
 const app = express();
 
-// 🔹 Libera o Netlify acessar
+// 🔹 libera o Netlify acessar
 app.use(cors({ origin: "https://avali-gti2025.netlify.app" }));
 app.use(express.json());
 
-// 🔹 Salvar respostas
+// 🔹 Mapeamento texto → número
+const escala5 = {
+  "Muito Insatisfatório": 1,
+  "Insatisfatório": 2,
+  "Regular": 3,
+  "Satisfatório": 4,
+  "Muito Satisfatório": 5,
+
+  "Nunca": 1,
+  "Raramente": 2,
+  "Às vezes": 3,
+  "Frequentemente": 4,
+  "Sempre": 5,
+
+  "Totalmente Desconfortável": 1,
+  "Desconfortável": 2,
+  "Neutro": 3,
+  "Confortável": 4,
+  "Muito Confortável": 5,
+
+  "Não oferece apoio": 1,
+  "Apoio insuficiente": 2,
+  "Apoio adequado": 3,
+  "Apoio bom": 4,
+  "Apoio excelente": 5
+};
+
+// 🔹 Salvar respostas (convertendo)
 app.post("/salvar", (req, res) => {
-  fs.appendFileSync("respostas.json", JSON.stringify(req.body) + "\n");
+  const entrada = req.body;
+  const convertido = {};
+
+  for (const [key, val] of Object.entries(entrada)) {
+    if (escala5[val]) {
+      convertido[key] = escala5[val]; // texto → número
+    } else if (!isNaN(Number(val))) {
+      convertido[key] = Number(val);  // número já enviado
+    } else {
+      convertido[key] = val;          // feedback textual ou outro campo
+    }
+  }
+
+  fs.appendFileSync("respostas.json", JSON.stringify(convertido) + "\n");
   res.json({ ok: true });
 });
 
-// 🔹 Calcular resultados (médias)
+// 🔹 Calcular médias
 app.get("/resultados", (req, res) => {
   if (!fs.existsSync("respostas.json")) return res.json({});
 
@@ -28,9 +68,8 @@ app.get("/resultados", (req, res) => {
 
   linhas.forEach(resp => {
     for (const [key, val] of Object.entries(resp)) {
-      const num = Number(val);
-      if (!isNaN(num)) {
-        soma[key] = (soma[key] || 0) + num;
+      if (typeof val === "number") {
+        soma[key] = (soma[key] || 0) + val;
         count[key] = (count[key] || 0) + 1;
       }
     }
