@@ -155,21 +155,63 @@
 
   // já atualiza uma vez ao carregar a página
   atualizarGrafico();
+    
+  // Importa Firebase Web SDK
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    // --- Submissão ---
-    document.getElementById("form360").addEventListener("submit",function(e){
-      e.preventDefault();
-      const dados=Object.fromEntries(new FormData(this).entries());
-      fetch("https://avaliacaogti.onrender.com/salvar",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(dados)
-      }).then(r=>r.json()).then(res=>{
-        alert("✅ Avaliação registrada!");
-        this.reset(); secaoColegas.style.display="none";
-        atualizarGrafico();
-      });
+  const firebaseConfig = {
+    apiKey: "XXXX",
+    authDomain: "avaliacao360.firebaseapp.com",
+    projectId: "avaliacao360",
+    storageBucket: "avaliacao360.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // envio do formulário
+  document.getElementById("form360").addEventListener("submit", async function(e){
+    e.preventDefault();
+    const dados = Object.fromEntries(new FormData(this).entries());
+
+    await addDoc(collection(db, "respostas"), dados);
+
+    alert("✅ Avaliação registrada!");
+    this.reset();
+    secaoColegas.style.display="none";
+    atualizarGrafico();
+  });
+
+  // carregar resultados pro gráfico
+  async function atualizarGrafico() {
+    const snap = await getDocs(collection(db, "respostas"));
+    const linhas = snap.docs.map(d => d.data());
+
+    // calcula médias
+    const soma = {}, count = {};
+    linhas.forEach(resp => {
+      for(const [k,v] of Object.entries(resp)){
+        const num = Number(v);
+        if(!isNaN(num)){
+          soma[k] = (soma[k]||0)+num;
+          count[k] = (count[k]||0)+1;
+        }
+      }
     });
+    const medias = {};
+    for(const k in soma){
+      medias[k] = soma[k]/count[k];
+    }
+
+    grafico.data.datasets[0].data = labels.map(l => medias[l] || 0);
+    grafico.update();
+  }
+
+  atualizarGrafico();
   </script>
 </body>
 </html>
+
