@@ -47,9 +47,13 @@
     </form>
   </div>
 
-  <!-- Gráfico -->
-  <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10 mt-10">
-    <h2 class="text-2xl font-semibold mb-6">📈 Resultados (médias reais)</h2>
+   <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10 mt-10">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-semibold">📈 Resultados (médias reais)</h2>
+      <button id="btnAtualizar" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+        🔄 Atualizar Gráfico
+      </button>
+    </div>
     <canvas id="graficoResultados" height="120"></canvas>
   </div>
 
@@ -144,7 +148,13 @@
         console.error("Erro ao buscar resultados:", err);
       }
     }
-    atualizarGrafico();
+
+
+      // botão manual de atualizar
+  document.getElementById("btnAtualizar").addEventListener("click", atualizarGrafico);
+
+  // já atualiza uma vez ao carregar a página
+  atualizarGrafico();
 
     // --- Submissão ---
     document.getElementById("form360").addEventListener("submit",function(e){
