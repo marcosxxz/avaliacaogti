@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Avaliação 360°</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
+    <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10">
+        <h1 class="text-3xl font-bold text-center text-indigo-700 mb-2">📊 Avaliação 360°</h1>
+        <p class="text-gray-600 text-center mb-8">
+            Esta pesquisa é <strong>100% anônima</strong>.
+            Responda com sinceridade e respeito — sua contribuição é essencial.
+        </p>
+
+        <form id="form360" class="space-y-12">
+            <!-- Identificação -->
+            <section>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Identificação</h2>
+                <p class="text-gray-600 mb-4">Selecione seu nome (usado apenas para ocultar sua autoavaliação entre
+                    colegas).</p>
+                <select id="respondente" name="respondente" class="w-full border rounded p-2" required>
+                    <option value="">Selecione seu nome...</option>
+                    <option>Keila</option>
+                    <option>Ariel</option>
+                    <option>Dante</option>
+                    <option>Alex</option>
+                    <option>Sayonara</option>
+                    <option>Rafael</option>
+                    <option>Marcus</option>
+                    <option>Jaqueline</option>
+                    <option>Glaucio</option>
+                    <option>Lucélio</option>
+                    <option>Eduardo</option>
+                </select>
+            </section>
+
+            <!-- Avaliação do Gerente -->
+            <section>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">1. Avaliação do Gerente – Márcio Merçon</h2>
+                <div class="space-y-4">
+                    <label>Capacidade de mobilizar e envolver a equipe</label>
+                    <select name="gerente_mobilizar" class="w-full border rounded p-2" required>
+                        <option value="">Selecione...</option>
+                        <option>Muito Insatisfatório</option>
+                        <option>Insatisfatório</option>
+                        <option>Regular</option>
+                        <option>Satisfatório</option>
+                        <option>Muito Satisfatório</option>
+                    </select>
+                    <label>Exerce feedback, elogios e críticas</label>
+                    <select name="gerente_feedback" class="w-full border rounded p-2" required>…</select>
+                    <label>Comunica informações de forma clara</label>
+                    <select name="gerente_comunicacao" class="w-full border rounded p-2" required>…</select>
+                    <label>Como lida com conflitos</label>
+                    <select name="gerente_conflitos" class="w-full border rounded p-2" required>…</select>
+                    <label>Respeito e empatia</label>
+                    <select name="gerente_empatia" class="w-full border rounded p-2" required>…</select>
+                    <label>Apoio e acessibilidade</label>
+                    <select name="gerente_apoio" class="w-full border rounded p-2" required>…</select>
+                    <label>Reconhecimento e valorização</label>
+                    <select name="gerente_reconhecimento" class="w-full border rounded p-2" required>…</select>
+                    <label>Periodicidade do feedback</label>
+                    <select name="gerente_periodicidade" class="w-full border rounded p-2" required>…</select>
+                    <label>Clima de confiança</label>
+                    <select name="gerente_confianca" class="w-full border rounded p-2" required>…</select>
+                    <label>Comunica expectativas</label>
+                    <select name="gerente_expectativas" class="w-full border rounded p-2" required>…</select>
+                    <label>Resolução de problemas</label>
+                    <select name="gerente_resolucao" class="w-full border rounded p-2" required>…</select>
+                    <label>Incentiva aprendizado</label>
+                    <select name="gerente_desenvolvimento" class="w-full border rounded p-2" required>…</select>
+
+                    <label class="block mt-4">Feedback adicional sobre o gerente</label>
+                    <textarea name="gerente_extra" rows="3" class="w-full border rounded p-2"></textarea>
+                </div>
+            </section>
+
+            <!-- Avaliação dos Chefes -->
+            <section>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">2. Avaliação dos Chefes de Núcleo</h2>
+                <p class="text-gray-600 mb-4">Selecione qual chefe deseja avaliar.</p>
+
+                <select id="chefeEscolhido" class="w-full border rounded p-2 mb-6">
+                    <option value="">Selecione...</option>
+                    <option>Maycon</option>
+                    <option>Luciane</option>
+                </select>
+
+                <div id="chefe-container"></div>
+            </section>
+
+            <!-- Avaliação entre Colegas -->
+            <section id="secaoColegas" style="display:none;">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">3. Avaliação entre Colegas</h2>
+                <p class="text-gray-600 mb-4">Responda sobre cada colega de forma anônima.</p>
+                <div id="colegas-container" class="space-y-10"></div>
+            </section>
+
+            <!-- Botão -->
+            <div class="text-center">
+                <button type="submit"
+                    class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700">
+                    Enviar Avaliação
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Gráfico -->
+    <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10 mt-10">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">📈 Resultados (simulação local)</h2>
+        <canvas id="graficoResultados" height="120"></canvas>
+    </div>
+
+    <script>
+        // ============================
+        // Configurações
+        // ============================
+        const todosColegas = ["Keila", "Ariel", "Dante", "Alex", "Sayonara", "Rafael", "Marcus", "Jaqueline", "Glaucio", "Lucélio", "Eduardo"];
+
+        const perguntasColegas = [
+            { id: "colaboracao", label: "Colaboração", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"], valores: [1, 2, 3, 4, 5] },
+            { id: "comunicacao", label: "Comunicação", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"], valores: [1, 2, 3, 4, 5] },
+            { id: "empatia", label: "Apoio e Empatia", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"], valores: [1, 2, 3, 4, 5] },
+            { id: "conflitos", label: "Resolução de Conflitos", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"], valores: [1, 2, 3, 4, 5] },
+            { id: "iniciativa", label: "Iniciativa e Proatividade", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"], valores: [1, 2, 3, 4, 5] }
+        ];
+
+        const perguntasChefe = [
+            { id: "mobilizar", label: "Capacidade de mobilizar e envolver a equipe", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
+            { id: "visao", label: "Visão clara das estratégias da equipe", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
+            { id: "desenvolvimento", label: "Incentiva o desenvolvimento profissional", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
+            { id: "tratamento", label: "Te trata de forma satisfatória", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
+            { id: "conflitos", label: "Eficaz ao mediar conflitos", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
+            { id: "dialogo", label: "Você se sente confortável para diálogo", opcoes: ["Totalmente Desconfortável", "Desconfortável", "Neutro", "Confortável", "Muito Confortável"] },
+            { id: "apoio", label: "Oferece apoio e orientação", opcoes: ["Não oferece apoio", "Apoio insuficiente", "Apoio adequado", "Apoio bom", "Apoio excelente"] },
+            { id: "diretrizes", label: "Clareza nas diretrizes", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
+            { id: "feedback", label: "Feedback e reconhecimento", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
+            { id: "inclusao", label: "Promove ambiente inclusivo", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
+            { id: "gestao_conflitos", label: "Como lida com conflitos", opcoes: ["Totalmente Desconfortável", "Desconfortável", "Neutro", "Confortável", "Muito Confortável"] },
+            { id: "facilitacao", label: "Facilita o desenvolvimento profissional", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
+            { id: "empatia", label: "Empatia e escuta ativa", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
+            { id: "proatividade", label: "Estimula proatividade", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] }
+        ];
+
+        // ============================
+        // Geração dinâmica
+        // ============================
+        const containerColegas = document.getElementById("colegas-container");
+        const secaoColegas = document.getElementById("secaoColegas");
+
+        document.getElementById("respondente").addEventListener("change", function () {
+            const respondente = this.value;
+            if (!respondente) { secaoColegas.style.display = "none"; return; }
+            const colegas = todosColegas.filter(n => n !== respondente);
+            containerColegas.innerHTML = "";
+            colegas.forEach(nome => {
+                const div = document.createElement("div");
+                div.className = "p-6 border rounded-lg bg-gray-50";
+                let html = `<h3 class="text-xl font-medium text-indigo-700 mb-4">${nome}</h3>`;
+                perguntasColegas.forEach(p => {
+                    html += `<label class="block mb-2">${p.label}</label>`;
+                    html += `<select name="${nome.toLowerCase()}_${p.id}" class="w-full border rounded p-2 mb-4" required>`;
+                    html += `<option value="">Selecione...</option>`;
+                    p.opcoes.forEach(opt => html += `<option>${opt}</option>`);
+                    html += `</select>`;
+                });
+                html += `<label class="block mb-2">Feedback adicional sobre ${nome}</label>`;
+                html += `<textarea name="${nome.toLowerCase()}_extra" class="w-full border rounded p-2"></textarea>`;
+                div.innerHTML = html;
+                containerColegas.appendChild(div);
+            });
+            secaoColegas.style.display = "block";
+        });
+
+        // Geração dinâmica chefe
+        const chefeContainer = document.getElementById("chefe-container");
+        document.getElementById("chefeEscolhido").addEventListener("change", function () {
+            chefeContainer.innerHTML = "";
+            const chefe = this.value;
+            if (!chefe) return;
+            const div = document.createElement("div");
+            div.className = "p-6 border rounded-lg bg-gray-50";
+            let html = `<h3 class="text-xl font-medium text-indigo-700 mb-4">${chefe}</h3>`;
+            perguntasChefe.forEach(p => {
+                html += `<label class="block mb-2">${p.label}</label>`;
+                html += `<select name="${chefe.toLowerCase()}_${p.id}" class="w-full border rounded p-2 mb-4" required>`;
+                html += `<option value="">Selecione...</option>`;
+                p.opcoes.forEach(opt => html += `<option>${opt}</option>`);
+                html += `</select>`;
+            });
+            html += `<label class="block mb-2">Feedback adicional sobre ${chefe}</label>`;
+            html += `<textarea name="${chefe.toLowerCase()}_extra" class="w-full border rounded p-2"></textarea>`;
+            div.innerHTML = html;
+            chefeContainer.appendChild(div);
+        });
+
+        // ============================
+        // Gráfico
+        // ============================
+        const ctx = document.getElementById("graficoResultados").getContext("2d");
+        const grafico = new Chart(ctx, {
+            type: "bar",
+            data: { labels: todosColegas, datasets: [{ label: "Média das Avaliações", data: Array(todosColegas.length).fill(0), backgroundColor: "rgba(79,70,229,0.6)" }] },
+            options: { scales: { y: { beginAtZero: true, max: 5 } } }
+        });
+
+        // ============================
+        // Submissão
+        // ============================
+        document.getElementById("form360").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const data = Object.fromEntries(new FormData(this).entries());
+            console.log("📤 Dados enviados:", data);
+            alert("✅ Avaliação registrada! (simulação)");
+            this.reset();
+            secaoColegas.style.display = "none";
+            chefeContainer.innerHTML = "";
+        });
+    </script>
+</body>
+
+</html>
