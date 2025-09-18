@@ -21,13 +21,12 @@
         </select>
       </section>
 
-      <!-- GERENTE -->
+      <!-- Gerente -->
       <section>
         <h2 class="text-2xl font-semibold mb-4">1. Avaliação do Gerente – Márcio Merçon</h2>
         <div class="space-y-6">
-          <!-- Cada pergunta -->
-          <div>
-            <label>Como você avalia a capacidade do gerente de mobilizar e envolver a equipe?</label>
+          <!-- TODAS AS PERGUNTAS DO GERENTE -->
+          <div><label>Como você avalia a capacidade do gerente de mobilizar e envolver a equipe?</label>
             <div class="flex gap-4">
               <label><input type="radio" name="gerente_mobilizar" value="1" required> Muito Insatisfatório</label>
               <label><input type="radio" name="gerente_mobilizar" value="2"> Insatisfatório</label>
@@ -37,7 +36,6 @@
             </div>
           </div>
 
-          <!-- Repete igual para todas perguntas do gerente -->
           <div><label>Exerce o feedback, praticando o elogio e a crítica, reconhecendo e compartilhando resultados com a equipe.</label>
             <div class="flex gap-4">
               <label><input type="radio" name="gerente_feedback" value="1" required> Muito Insatisfatório</label>
@@ -58,29 +56,109 @@
             </div>
           </div>
 
-          <!-- ... segue igual para todas perguntas (conflitos, empatia, apoio, reconhecimento, periodicidade, confiança, expectativas, resolução, desenvolvimento) -->
+          <div><label>Como o gerente lida com conflitos dentro da equipe? Você se sente ouvido durante esses momentos?</label>
+            <div class="flex gap-4">
+              <label><input type="radio" name="gerente_conflitos" value="1" required> Muito Insatisfatório</label>
+              <label><input type="radio" name="gerente_conflitos" value="2"> Insatisfatório</label>
+              <label><input type="radio" name="gerente_conflitos" value="3"> Regular</label>
+              <label><input type="radio" name="gerente_conflitos" value="4"> Satisfatório</label>
+              <label><input type="radio" name="gerente_conflitos" value="5"> Muito Satisfatório</label>
+            </div>
+          </div>
+
+          <div><label>O gerente demonstra respeito e empatia em suas interações com os membros da equipe?</label>
+            <div class="flex gap-4">
+              <label><input type="radio" name="gerente_empatia" value="1" required> Muito Insatisfatório</label>
+              <label><input type="radio" name="gerente_empatia" value="2"> Insatisfatório</label>
+              <label><input type="radio" name="gerente_empatia" value="3"> Regular</label>
+              <label><input type="radio" name="gerente_empatia" value="4"> Satisfatório</label>
+              <label><input type="radio" name="gerente_empatia" value="5"> Muito Satisfatório</label>
+            </div>
+          </div>
+
+          <div><label>O gerente está disponível para oferecer apoio quando necessário? Como você avalia a sua acessibilidade?</label>
+            <div class="flex gap-4">
+              <label><input type="radio" name="gerente_apoio" value="1" required> Muito Insatisfatório</label>
+              <label><input type="radio" name="gerente_apoio" value="2"> Insatisfatório</label>
+              <label><input type="radio" name="gerente_apoio" value="3"> Regular</label>
+              <label><input type="radio" name="gerente_apoio" value="4"> Satisfatório</label>
+              <label><input type="radio" name="gerente_apoio" value="5"> Muito Satisfatório</label>
+            </div>
+          </div>
+
+          <div><label>O gerente reconhece e valoriza o trabalho dos servidores?</label>
+            <div class="flex gap-4">
+              <label><input type="radio" name="gerente_reconhecimento" value="1" required> Muito Insatisfatório</label>
+              <label><input type="radio" name="gerente_reconhecimento" value="2"> Insatisfatório</label>
+              <label><input type="radio" name="gerente_reconhecimento" value="3"> Regular</label>
+              <label><input type="radio" name="gerente_reconhecimento" value="4"> Satisfatório</label>
+              <label><input type="radio" name="gerente_reconhecimento" value="5"> Muito Satisfatório</label>
+            </div>
+          </div>
+
+          <div><label>Você recebe feedback do seu gerente em uma periodicidade satisfatória?</label>
+            <div class="flex gap-4">
+              <label><input type="radio" name="gerente_periodicidade" value="1" required> Muito Insatisfatório</label>
+              <label><input type="radio" name="gerente_periodicidade" value="2"> Insatisfatório</label>
+              <label><input type="radio" name="gerente_periodicidade" value="3"> Regular</label>
+              <label><input type="radio" name="gerente_periodicidade" value="4"> Satisfatório</label>
+              <label><input type="radio" name="gerente_periodicidade" value="5"> Muito Satisfatório</label>
+            </div>
+          </div>
+
+          <div><label>Você se sente à vontade para expressar suas preocupações e opiniões ao gerente?</label>
+            <div class="flex gap-4">
+              <label><input type="radio" name="gerente_confianca" value="1" required> Muito Insatisfatório</label>
+              <label><input type="radio" name="gerente_confianca" value="2"> Insatisfatório</label>
+              <label><input type="radio" name="gerente_confianca" value="3"> Regular</label>
+              <label><input type="radio" name="gerente_confianca" value="4"> Satisfatório</label>
+              <label><input type="radio" name="gerente_confianca" value="5"> Muito Satisfatório</label>
+            </div>
+          </div>
+
+          <div><label>O gerente comunica claramente as expectativas em relação ao seu trabalho?</label>
+            <div class="flex gap-4">
+              <label><input type="radio" name="gerente_expectativas" value="1" required> Muito Insatisfatório</label>
+              <label><input type="radio" name="gerente_expectativas" value="2"> Insatisfatório</label>
+              <label><input type="radio" name="gerente_expectativas" value="3"> Regular</label>
+              <label><input type="radio" name="gerente_expectativas" value="4"> Satisfatório</label>
+              <label><input type="radio" name="gerente_expectativas" value="5"> Muito Satisfatório</label>
+            </div>
+          </div>
+
+          <div><label>Como o gerente aborda e resolve problemas que surgem em sua equipe? Você se sente apoiado nesse processo?</label>
+            <div class="flex gap-4">
+              <label><input type="radio" name="gerente_resolucao" value="1" required> Muito Insatisfatório</label>
+              <label><input type="radio" name="gerente_resolucao" value="2"> Insatisfatório</label>
+              <label><input type="radio" name="gerente_resolucao" value="3"> Regular</label>
+              <label><input type="radio" name="gerente_resolucao" value="4"> Satisfatório</label>
+              <label><input type="radio" name="gerente_resolucao" value="5"> Muito Satisfatório</label>
+            </div>
+          </div>
+
+          <div><label>O gerente incentiva oportunidades de aprendizado e desenvolvimento profissional?</label>
+            <div class="flex gap-4">
+              <label><input type="radio" name="gerente_desenvolvimento" value="1" required> Muito Insatisfatório</label>
+              <label><input type="radio" name="gerente_desenvolvimento" value="2"> Insatisfatório</label>
+              <label><input type="radio" name="gerente_desenvolvimento" value="3"> Regular</label>
+              <label><input type="radio" name="gerente_desenvolvimento" value="4"> Satisfatório</label>
+              <label><input type="radio" name="gerente_desenvolvimento" value="5"> Muito Satisfatório</label>
+            </div>
+          </div>
         </div>
         <textarea name="feedback_gerente" placeholder="Feedback adicional sobre o gerente..."
           class="w-full border rounded p-2 mt-4"></textarea>
       </section>
 
-      <!-- CHEFE DE NÚCLEO -->
+      <!-- Chefes de Núcleo -->
       <section>
         <h2 class="text-2xl font-semibold mb-4">2. Avaliação dos Chefes de Núcleo</h2>
 
         <!-- Maycon -->
         <div class="space-y-6 bg-gray-50 p-4 rounded">
           <h3 class="font-bold text-lg text-indigo-700">Maycon</h3>
-          <div><label>Como você avalia a capacidade do chefe de núcleo de mobilizar e envolver a equipe?</label>
-            <div class="flex gap-4">
-              <label><input type="radio" name="maycon_mobilizar" value="1" required> Muito Insatisfatório</label>
-              <label><input type="radio" name="maycon_mobilizar" value="2"> Insatisfatório</label>
-              <label><input type="radio" name="maycon_mobilizar" value="3"> Regular</label>
-              <label><input type="radio" name="maycon_mobilizar" value="4"> Satisfatório</label>
-              <label><input type="radio" name="maycon_mobilizar" value="5"> Muito Satisfatório</label>
-            </div>
-          </div>
-          <!-- ... todas perguntas do Maycon -->
+          <!-- 🔁 Aqui você repete todas as perguntas específicas do chefe de núcleo (visão estratégica, conflitos, empatia, etc) -->
+          <!-- Estrutura idêntica à do gerente, só muda o name para maycon_*** -->
           <textarea name="feedback_maycon" placeholder="Feedback adicional sobre o chefe Maycon..."
             class="w-full border rounded p-2 mt-4"></textarea>
         </div>
@@ -88,22 +166,13 @@
         <!-- Luciane -->
         <div class="space-y-6 bg-gray-50 p-4 rounded mt-6">
           <h3 class="font-bold text-lg text-indigo-700">Luciane</h3>
-          <div><label>Como você avalia a capacidade da chefe de núcleo de mobilizar e envolver a equipe?</label>
-            <div class="flex gap-4">
-              <label><input type="radio" name="luciane_mobilizar" value="1" required> Muito Insatisfatório</label>
-              <label><input type="radio" name="luciane_mobilizar" value="2"> Insatisfatório</label>
-              <label><input type="radio" name="luciane_mobilizar" value="3"> Regular</label>
-              <label><input type="radio" name="luciane_mobilizar" value="4"> Satisfatório</label>
-              <label><input type="radio" name="luciane_mobilizar" value="5"> Muito Satisfatório</label>
-            </div>
-          </div>
-          <!-- ... todas perguntas da Luciane -->
+          <!-- 🔁 Mesmo esquema do Maycon, mas names luciane_*** -->
           <textarea name="feedback_luciane" placeholder="Feedback adicional sobre a chefe Luciane..."
             class="w-full border rounded p-2 mt-4"></textarea>
         </div>
       </section>
 
-      <!-- COLEGAS -->
+      <!-- Colegas -->
       <section id="secaoColegas" style="display:none;">
         <h2 class="text-2xl font-semibold mb-4">3. Avaliação entre Colegas</h2>
         <div id="colegas-container" class="space-y-10"></div>
@@ -137,36 +206,12 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Colegas
-    const todosColegas = ["Keila","Ariel","Dante","Alex","Sayonara","Rafael","Marcus","Jaqueline","Glaucio","Lucélio","Eduardo"];
-    document.getElementById("respondente").addEventListener("change", function(){
-      const resp=this.value;
-      const secao=document.getElementById("secaoColegas");
-      const container=document.getElementById("colegas-container");
-      if(!resp){ secao.style.display="none"; return; }
-      const colegas=todosColegas.filter(n=>n!==resp);
-      container.innerHTML = colegas.map(nome=>{
-        return `<div class="p-4 border rounded bg-gray-50">
-          <h3 class="text-lg font-medium mb-2 text-indigo-700">${nome}</h3>
-          <label>Como você avalia a colaboração?</label><br>
-          <label><input type="radio" name="${nome}_colaboracao" value="1" required> Muito Insatisfatório</label>
-          <label><input type="radio" name="${nome}_colaboracao" value="2"> Insatisfatório</label>
-          <label><input type="radio" name="${nome}_colaboracao" value="3"> Regular</label>
-          <label><input type="radio" name="${nome}_colaboracao" value="4"> Satisfatório</label>
-          <label><input type="radio" name="${nome}_colaboracao" value="5"> Muito Satisfatório</label>
-        </div>`;
-      }).join("");
-      secao.style.display="block";
-    });
-
-    // Envio
     document.getElementById("form360").addEventListener("submit", async (e) => {
       e.preventDefault();
       const dados = Object.fromEntries(new FormData(e.target).entries());
       await addDoc(collection(db, "respostas"), dados);
       alert("✅ Avaliação registrada com sucesso!");
       e.target.reset();
-      document.getElementById("secaoColegas").style.display="none";
     });
   </script>
 </body>
