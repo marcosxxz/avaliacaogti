@@ -30,10 +30,10 @@
           class="w-full border rounded p-2 mt-4"></textarea>
       </section>
 
-      <!-- Chefes -->
+      <!-- Chefe -->
       <section>
-        <h2 class="text-2xl font-semibold mb-4">2. Avaliação do Chefe de Núcleo</h2>
-        <div id="luciane-container" class="space-y-4 bg-gray-50 p-4 rounded mt-6"></div>
+        <h2 class="text-2xl font-semibold mb-4">2. Avaliação da Chefe de Núcleo</h2>
+        <div id="luciane-container" class="space-y-4 bg-gray-50 p-4 rounded"></div>
         <textarea name="feedback_luciane" placeholder="Feedback adicional sobre a chefe Luciane..."
           class="w-full border rounded p-2 mt-4"></textarea>
       </section>
@@ -124,7 +124,7 @@
     document.getElementById("gerente-container").innerHTML =
       perguntasGerente.map(p => criarSelect("gerente_"+p.id, p.txt, true)).join("");
 
-    // --- Perguntas Chefes ---
+    // --- Perguntas Chefe Luciane ---
     const perguntasChefe = [
       { id:"mobilizar", txt:"Como você avalia a capacidade do chefe de núcleo de mobilizar e envolver a equipe?" },
       { id:"visao", txt:"O chefe de núcleo demonstra uma visão clara das estratégias da equipe?" },
@@ -246,5 +246,3 @@
   </script>
 </body>
 </html>
-
-
