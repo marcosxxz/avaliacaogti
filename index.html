@@ -32,11 +32,7 @@
 
       <!-- Chefes -->
       <section>
-        <h2 class="text-2xl font-semibold mb-4">2. Avaliação dos Chefes de Núcleo</h2>
-        <div id="maycon-container" class="space-y-4 bg-gray-50 p-4 rounded"></div>
-        <textarea name="feedback_maycon" placeholder="Feedback adicional sobre o chefe Maycon..."
-          class="w-full border rounded p-2 mt-4"></textarea>
-
+        <h2 class="text-2xl font-semibold mb-4">2. Avaliação do Chefe de Núcleo</h2>
         <div id="luciane-container" class="space-y-4 bg-gray-50 p-4 rounded mt-6"></div>
         <textarea name="feedback_luciane" placeholder="Feedback adicional sobre a chefe Luciane..."
           class="w-full border rounded p-2 mt-4"></textarea>
@@ -140,7 +136,6 @@
         `<h3 class='font-bold mb-2 text-indigo-700'>${nome}</h3>` +
         perguntasChefe.map(p => criarSelect(nome.toLowerCase()+"_"+p.id,p.txt,true)).join("");
     }
-    renderChefe("maycon-container","Maycon");
     renderChefe("luciane-container","Luciane");
 
     // --- Perguntas Colegas ---
@@ -167,7 +162,7 @@
 
     // --- Gráfico ---
     const ctx = document.getElementById("graficoResultados").getContext("2d");
-    const labels = ["Gerente","Maycon","Luciane",...todosColegas];
+    const labels = ["Gerente","Luciane",...todosColegas];
     const grafico = new Chart(ctx, {
       type: "bar",
       data: { labels, datasets:[{label:"Média",data:Array(labels.length).fill(0),backgroundColor:Array(labels.length).fill("rgba(107,114,128,0.5)")} ]},
@@ -252,3 +247,4 @@
   </script>
 </body>
 </html>
+
