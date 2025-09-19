@@ -179,7 +179,6 @@
           const num=Number(v);
           if(!isNaN(num)){
             const alvo = k.includes("gerente") ? "Gerente" :
-                         k.includes("maycon") ? "Maycon" :
                          k.includes("luciane") ? "Luciane" :
                          todosColegas.find(c=>k.toLowerCase().startsWith(c.toLowerCase())) || null;
             if(alvo){
@@ -247,4 +246,5 @@
   </script>
 </body>
 </html>
+
 
