@@ -1,227 +1,251 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Avaliação 360°</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <title>Avaliação 360°</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
-    <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10">
-        <h1 class="text-3xl font-bold text-center text-indigo-700 mb-2">📊 Avaliação 360°</h1>
-        <p class="text-gray-600 text-center mb-8">
-            Esta pesquisa é <strong>100% anônima</strong>.
-            Responda com sinceridade e respeito — sua contribuição é essencial.
-        </p>
+  <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10">
+    <h1 class="text-3xl font-bold text-center text-indigo-700 mb-6">📊 Avaliação 360°</h1>
+    <form id="form360" class="space-y-12">
 
-        <form id="form360" class="space-y-12">
-            <!-- Identificação -->
-            <section>
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Identificação</h2>
-                <p class="text-gray-600 mb-4">Selecione seu nome (usado apenas para ocultar sua autoavaliação entre
-                    colegas).</p>
-                <select id="respondente" name="respondente" class="w-full border rounded p-2" required>
-                    <option value="">Selecione seu nome...</option>
-                    <option>Keila</option>
-                    <option>Ariel</option>
-                    <option>Dante</option>
-                    <option>Alex</option>
-                    <option>Sayonara</option>
-                    <option>Rafael</option>
-                    <option>Marcus</option>
-                    <option>Jaqueline</option>
-                    <option>Glaucio</option>
-                    <option>Lucélio</option>
-                    <option>Eduardo</option>
-                </select>
-            </section>
+      <!-- Identificação -->
+      <section>
+        <h2 class="text-2xl font-semibold mb-4">Identificação</h2>
+        <select id="respondente" name="respondente" class="w-full border rounded p-2" required>
+          <option value="">Selecione seu nome...</option>
+          <option>Keila</option><option>Ariel</option><option>Dante</option><option>Alex</option>
+          <option>Sayonara</option><option>Rafael</option><option>Marcus</option><option>Jaqueline</option>
+          <option>Glaucio</option><option>Lucélio</option><option>Eduardo</option>
+        </select>
+      </section>
 
-            <!-- Avaliação do Gerente -->
-            <section>
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">1. Avaliação do Gerente – Márcio Merçon</h2>
-                <div class="space-y-4">
-                    <label>Capacidade de mobilizar e envolver a equipe</label>
-                    <select name="gerente_mobilizar" class="w-full border rounded p-2" required>
-                        <option value="">Selecione...</option>
-                        <option>Muito Insatisfatório</option>
-                        <option>Insatisfatório</option>
-                        <option>Regular</option>
-                        <option>Satisfatório</option>
-                        <option>Muito Satisfatório</option>
-                    </select>
-                    <label>Exerce feedback, elogios e críticas</label>
-                    <select name="gerente_feedback" class="w-full border rounded p-2" required>…</select>
-                    <label>Comunica informações de forma clara</label>
-                    <select name="gerente_comunicacao" class="w-full border rounded p-2" required>…</select>
-                    <label>Como lida com conflitos</label>
-                    <select name="gerente_conflitos" class="w-full border rounded p-2" required>…</select>
-                    <label>Respeito e empatia</label>
-                    <select name="gerente_empatia" class="w-full border rounded p-2" required>…</select>
-                    <label>Apoio e acessibilidade</label>
-                    <select name="gerente_apoio" class="w-full border rounded p-2" required>…</select>
-                    <label>Reconhecimento e valorização</label>
-                    <select name="gerente_reconhecimento" class="w-full border rounded p-2" required>…</select>
-                    <label>Periodicidade do feedback</label>
-                    <select name="gerente_periodicidade" class="w-full border rounded p-2" required>…</select>
-                    <label>Clima de confiança</label>
-                    <select name="gerente_confianca" class="w-full border rounded p-2" required>…</select>
-                    <label>Comunica expectativas</label>
-                    <select name="gerente_expectativas" class="w-full border rounded p-2" required>…</select>
-                    <label>Resolução de problemas</label>
-                    <select name="gerente_resolucao" class="w-full border rounded p-2" required>…</select>
-                    <label>Incentiva aprendizado</label>
-                    <select name="gerente_desenvolvimento" class="w-full border rounded p-2" required>…</select>
+      <!-- Gerente -->
+      <section>
+        <h2 class="text-2xl font-semibold mb-4">1. Avaliação do Gerente – Márcio Merçon</h2>
+        <div id="gerente-container" class="space-y-4"></div>
+        <textarea name="feedback_gerente" placeholder="Feedback adicional sobre o gerente..."
+          class="w-full border rounded p-2 mt-4"></textarea>
+      </section>
 
-                    <label class="block mt-4">Feedback adicional sobre o gerente</label>
-                    <textarea name="gerente_extra" rows="3" class="w-full border rounded p-2"></textarea>
-                </div>
-            </section>
+      <!-- Chefes -->
+      <section>
+        <h2 class="text-2xl font-semibold mb-4">2. Avaliação do Chefe de Núcleo</h2>
+        <div id="luciane-container" class="space-y-4 bg-gray-50 p-4 rounded mt-6"></div>
+        <textarea name="feedback_luciane" placeholder="Feedback adicional sobre a chefe Luciane..."
+          class="w-full border rounded p-2 mt-4"></textarea>
+      </section>
 
-            <!-- Avaliação dos Chefes -->
-            <section>
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">2. Avaliação dos Chefes de Núcleo</h2>
-                <p class="text-gray-600 mb-4">Selecione qual chefe deseja avaliar.</p>
+      <!-- Colegas -->
+      <section id="secaoColegas" style="display:none;">
+        <h2 class="text-2xl font-semibold mb-4">3. Avaliação entre Colegas</h2>
+        <div id="colegas-container" class="space-y-10"></div>
+        <textarea name="feedback_colegas" placeholder="Feedback adicional sobre os colegas..."
+          class="w-full border rounded p-2 mt-4"></textarea>
+      </section>
 
-                <select id="chefeEscolhido" class="w-full border rounded p-2 mb-6">
-                    <option value="">Selecione...</option>
-                    <option>Maycon</option>
-                    <option>Luciane</option>
-                </select>
+      <div class="text-center">
+        <button type="submit" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg">Enviar Avaliação</button>
+      </div>
+    </form>
+  </div>
 
-                <div id="chefe-container"></div>
-            </section>
-
-            <!-- Avaliação entre Colegas -->
-            <section id="secaoColegas" style="display:none;">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">3. Avaliação entre Colegas</h2>
-                <p class="text-gray-600 mb-4">Responda sobre cada colega de forma anônima.</p>
-                <div id="colegas-container" class="space-y-10"></div>
-            </section>
-
-            <!-- Botão -->
-            <div class="text-center">
-                <button type="submit"
-                    class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700">
-                    Enviar Avaliação
-                </button>
-            </div>
-        </form>
+  <!-- Gráfico -->
+  <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-8 md:p-10 mt-10">
+    <div class="flex items-center justify-between mb-6 gap-4">
+      <h2 class="text-2xl font-semibold">📈 Resultados por Avaliado (Média • Nº respostas)</h2>
+      <div class="flex gap-2">
+        <button id="btnAtualizar" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+          🔄 Atualizar
+        </button>
+        <button id="btnExportar" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+          ⬇️ Exportar CSV
+        </button>
+      </div>
     </div>
+    <canvas id="graficoResultados" height="420"></canvas>
+    <p class="text-xs text-gray-500 mt-3">Cores: 
+      <span class="text-red-600 font-semibold">≤ 2.0</span> (ruim) • 
+      <span class="text-amber-600 font-semibold">≤ 3.5</span> (médio) • 
+      <span class="text-green-600 font-semibold">&gt; 3.5</span> (bom).
+      Itens sem respostas aparecem com média 0 (cinza).
+    </p>
+  </div>
 
-    <!-- Gráfico -->
-    <div class="w-full max-w-6xl bg-white shadow-xl rounded-xl p-10 mt-10">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">📈 Resultados (simulação local)</h2>
-        <canvas id="graficoResultados" height="120"></canvas>
-    </div>
+  <!-- Firebase + lógica -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    <script>
-        // ============================
-        // Configurações
-        // ============================
-        const todosColegas = ["Keila", "Ariel", "Dante", "Alex", "Sayonara", "Rafael", "Marcus", "Jaqueline", "Glaucio", "Lucélio", "Eduardo"];
+    // ✅ Config real do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyB1jA-lNvKKl9hR4ISSeIsx_ykopnE07Js",
+      authDomain: "avaliacao-8505d.firebaseapp.com",
+      projectId: "avaliacao-8505d",
+      storageBucket: "avaliacao-8505d.appspot.com",
+      messagingSenderId: "876588888475",
+      appId: "1:876588888475:web:17301078d76e5f5c38f13e",
+      measurementId: "G-WVCSB91VVN"
+    };
 
-        const perguntasColegas = [
-            { id: "colaboracao", label: "Colaboração", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"], valores: [1, 2, 3, 4, 5] },
-            { id: "comunicacao", label: "Comunicação", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"], valores: [1, 2, 3, 4, 5] },
-            { id: "empatia", label: "Apoio e Empatia", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"], valores: [1, 2, 3, 4, 5] },
-            { id: "conflitos", label: "Resolução de Conflitos", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"], valores: [1, 2, 3, 4, 5] },
-            { id: "iniciativa", label: "Iniciativa e Proatividade", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"], valores: [1, 2, 3, 4, 5] }
-        ];
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        const perguntasChefe = [
-            { id: "mobilizar", label: "Capacidade de mobilizar e envolver a equipe", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
-            { id: "visao", label: "Visão clara das estratégias da equipe", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
-            { id: "desenvolvimento", label: "Incentiva o desenvolvimento profissional", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
-            { id: "tratamento", label: "Te trata de forma satisfatória", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
-            { id: "conflitos", label: "Eficaz ao mediar conflitos", opcoes: ["Muito Insatisfatório", "Insatisfatório", "Regular", "Satisfatório", "Muito Satisfatório"] },
-            { id: "dialogo", label: "Você se sente confortável para diálogo", opcoes: ["Totalmente Desconfortável", "Desconfortável", "Neutro", "Confortável", "Muito Confortável"] },
-            { id: "apoio", label: "Oferece apoio e orientação", opcoes: ["Não oferece apoio", "Apoio insuficiente", "Apoio adequado", "Apoio bom", "Apoio excelente"] },
-            { id: "diretrizes", label: "Clareza nas diretrizes", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
-            { id: "feedback", label: "Feedback e reconhecimento", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
-            { id: "inclusao", label: "Promove ambiente inclusivo", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
-            { id: "gestao_conflitos", label: "Como lida com conflitos", opcoes: ["Totalmente Desconfortável", "Desconfortável", "Neutro", "Confortável", "Muito Confortável"] },
-            { id: "facilitacao", label: "Facilita o desenvolvimento profissional", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
-            { id: "empatia", label: "Empatia e escuta ativa", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] },
-            { id: "proatividade", label: "Estimula proatividade", opcoes: ["Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"] }
-        ];
+    const todosColegas = ["Keila","Ariel","Dante","Alex","Sayonara","Rafael","Marcus","Jaqueline","Glaucio","Lucélio","Eduardo"];
+    const opcoes5 = ["Muito Insatisfatório","Insatisfatório","Regular","Satisfatório","Muito Satisfatório"];
+    const valores5 = [1,2,3,4,5];
 
-        // ============================
-        // Geração dinâmica
-        // ============================
-        const containerColegas = document.getElementById("colegas-container");
-        const secaoColegas = document.getElementById("secaoColegas");
+    function criarSelect(name, label, obrigatorio=true, opcoes=opcoes5) {
+      let html = `<label class="block mb-2">${label}</label>`;
+      html += `<select name="${name}" class="w-full border rounded p-2 mb-4" ${obrigatorio ? "required" : ""}>`;
+      html += `<option value="">${obrigatorio ? "Selecione..." : "(Opcional)"}</option>`;
+      opcoes.forEach((opt,i) => html += `<option value="${valores5[i] || i+1}">${opt}</option>`);
+      html += `</select>`;
+      return html;
+    }
 
-        document.getElementById("respondente").addEventListener("change", function () {
-            const respondente = this.value;
-            if (!respondente) { secaoColegas.style.display = "none"; return; }
-            const colegas = todosColegas.filter(n => n !== respondente);
-            containerColegas.innerHTML = "";
-            colegas.forEach(nome => {
-                const div = document.createElement("div");
-                div.className = "p-6 border rounded-lg bg-gray-50";
-                let html = `<h3 class="text-xl font-medium text-indigo-700 mb-4">${nome}</h3>`;
-                perguntasColegas.forEach(p => {
-                    html += `<label class="block mb-2">${p.label}</label>`;
-                    html += `<select name="${nome.toLowerCase()}_${p.id}" class="w-full border rounded p-2 mb-4" required>`;
-                    html += `<option value="">Selecione...</option>`;
-                    p.opcoes.forEach(opt => html += `<option>${opt}</option>`);
-                    html += `</select>`;
-                });
-                html += `<label class="block mb-2">Feedback adicional sobre ${nome}</label>`;
-                html += `<textarea name="${nome.toLowerCase()}_extra" class="w-full border rounded p-2"></textarea>`;
-                div.innerHTML = html;
-                containerColegas.appendChild(div);
-            });
-            secaoColegas.style.display = "block";
-        });
+    // --- Perguntas Gerente ---
+    const perguntasGerente = [
+      { id:"mobilizar", txt:"Como você avalia a capacidade do gerente de mobilizar e envolver a equipe?" },
+      { id:"feedback", txt:"Exerce o feedback, praticando o elogio e a crítica, reconhecendo e compartilhando resultados com a equipe." },
+      { id:"comunicacao", txt:"O gerente comunica informações de forma clara e eficiente?" },
+      { id:"conflitos", txt:"Como o gerente lida com conflitos dentro da equipe? Você se sente ouvido durante esses momentos?" },
+      { id:"empatia", txt:"O gerente demonstra respeito e empatia em suas interações com os membros da equipe?" },
+      { id:"apoio", txt:"O gerente está disponível para oferecer apoio quando necessário? Como você avalia a sua acessibilidade?" },
+      { id:"reconhecimento", txt:"O gerente reconhece e valoriza o trabalho dos servidores?" },
+      { id:"periodicidade", txt:"Você recebe feedback do seu gerente em uma periodicidade satisfatória?" },
+      { id:"confianca", txt:"Você se sente à vontade para expressar suas preocupações e opiniões ao gerente?" },
+      { id:"expectativas", txt:"O gerente comunica claramente as expectativas em relação ao seu trabalho?" },
+      { id:"resolucao", txt:"Como o gerente aborda e resolve problemas que surgem em sua equipe? Você se sente apoiado nesse processo?" },
+      { id:"desenvolvimento", txt:"O gerente incentiva oportunidades de aprendizado e desenvolvimento profissional?" }
+    ];
+    document.getElementById("gerente-container").innerHTML =
+      perguntasGerente.map(p => criarSelect("gerente_"+p.id, p.txt, true)).join("");
 
-        // Geração dinâmica chefe
-        const chefeContainer = document.getElementById("chefe-container");
-        document.getElementById("chefeEscolhido").addEventListener("change", function () {
-            chefeContainer.innerHTML = "";
-            const chefe = this.value;
-            if (!chefe) return;
-            const div = document.createElement("div");
-            div.className = "p-6 border rounded-lg bg-gray-50";
-            let html = `<h3 class="text-xl font-medium text-indigo-700 mb-4">${chefe}</h3>`;
-            perguntasChefe.forEach(p => {
-                html += `<label class="block mb-2">${p.label}</label>`;
-                html += `<select name="${chefe.toLowerCase()}_${p.id}" class="w-full border rounded p-2 mb-4" required>`;
-                html += `<option value="">Selecione...</option>`;
-                p.opcoes.forEach(opt => html += `<option>${opt}</option>`);
-                html += `</select>`;
-            });
-            html += `<label class="block mb-2">Feedback adicional sobre ${chefe}</label>`;
-            html += `<textarea name="${chefe.toLowerCase()}_extra" class="w-full border rounded p-2"></textarea>`;
-            div.innerHTML = html;
-            chefeContainer.appendChild(div);
-        });
+    // --- Perguntas Chefes ---
+    const perguntasChefe = [
+      { id:"mobilizar", txt:"Como você avalia a capacidade do chefe de núcleo de mobilizar e envolver a equipe?" },
+      { id:"visao", txt:"O chefe de núcleo demonstra uma visão clara das estratégias da equipe?" },
+      { id:"desenvolvimento", txt:"O chefe de núcleo incentiva o desenvolvimento profissional dos membros da equipe?" },
+      { id:"tratamento", txt:"O chefe de núcleo te trata de forma satisfatória?" }
+    ];
+    function renderChefe(containerId, nome){
+      document.getElementById(containerId).innerHTML =
+        `<h3 class='font-bold mb-2 text-indigo-700'>${nome}</h3>` +
+        perguntasChefe.map(p => criarSelect(nome.toLowerCase()+"_"+p.id,p.txt,true)).join("");
+    }
+    renderChefe("luciane-container","Luciane");
 
-        // ============================
-        // Gráfico
-        // ============================
-        const ctx = document.getElementById("graficoResultados").getContext("2d");
-        const grafico = new Chart(ctx, {
-            type: "bar",
-            data: { labels: todosColegas, datasets: [{ label: "Média das Avaliações", data: Array(todosColegas.length).fill(0), backgroundColor: "rgba(79,70,229,0.6)" }] },
-            options: { scales: { y: { beginAtZero: true, max: 5 } } }
-        });
+    // --- Perguntas Colegas ---
+    const perguntasColegas = [
+      {id:"colab", txt:"Como você avalia a sua colaboração comigo em projetos e atividades da equipe?"},
+      {id:"positivo", txt:"Você sente que eu contribuo de maneira positiva para o trabalho em equipe?"},
+      {id:"comunicacao", txt:"Como você avalia nossa comunicação? Eu sou claro e acessível nas minhas interações?"},
+      {id:"ideias", txt:"Você se sente à vontade para compartilhar suas ideias e preocupações comigo?"}
+    ];
+    const colegasContainer=document.getElementById("colegas-container");
+    const secaoColegas=document.getElementById("secaoColegas");
+    document.getElementById("respondente").addEventListener("change", function(){
+      const resp=this.value;
+      if(!resp){ secaoColegas.style.display="none"; return; }
+      const colegas=todosColegas.filter(n=>n!==resp);
+      colegasContainer.innerHTML = colegas.map(nome=>{
+        return `<div class="p-4 border rounded bg-gray-50">
+          <h3 class="text-lg font-medium mb-2 text-indigo-700">${nome}</h3>
+          ${perguntasColegas.map(p=> criarSelect(nome.toLowerCase()+"_"+p.id,p.txt,false)).join("")}
+        </div>`;
+      }).join("");
+      secaoColegas.style.display="block";
+    });
 
-        // ============================
-        // Submissão
-        // ============================
-        document.getElementById("form360").addEventListener("submit", function (e) {
-            e.preventDefault();
-            const data = Object.fromEntries(new FormData(this).entries());
-            console.log("📤 Dados enviados:", data);
-            alert("✅ Avaliação registrada! (simulação)");
-            this.reset();
-            secaoColegas.style.display = "none";
-            chefeContainer.innerHTML = "";
-        });
-    </script>
+    // --- Gráfico ---
+    const ctx = document.getElementById("graficoResultados").getContext("2d");
+    const labels = ["Gerente","Luciane",...todosColegas];
+    const grafico = new Chart(ctx, {
+      type: "bar",
+      data: { labels, datasets:[{label:"Média",data:Array(labels.length).fill(0),backgroundColor:Array(labels.length).fill("rgba(107,114,128,0.5)")} ]},
+      options: { scales: { y: { beginAtZero:true, max:5 } } }
+    });
+
+    async function atualizarGrafico() {
+      const snap = await getDocs(collection(db, "respostas"));
+      const linhas = snap.docs.map(d => d.data());
+
+      const soma={}, count={};
+      linhas.forEach(resp=>{
+        for(const [k,v] of Object.entries(resp)){
+          const num=Number(v);
+          if(!isNaN(num)){
+            const alvo = k.includes("gerente") ? "Gerente" :
+                         k.includes("maycon") ? "Maycon" :
+                         k.includes("luciane") ? "Luciane" :
+                         todosColegas.find(c=>k.toLowerCase().startsWith(c.toLowerCase())) || null;
+            if(alvo){
+              soma[alvo]=(soma[alvo]||0)+num;
+              count[alvo]=(count[alvo]||0)+1;
+            }
+          }
+        }
+      });
+
+      const medias={};
+      for(const k in soma) medias[k]=soma[k]/count[k];
+
+      grafico.data.datasets[0].data = labels.map(l => medias[l]||0);
+      grafico.data.datasets[0].backgroundColor = labels.map(l=>{
+        const m = medias[l]||0;
+        if(m===0) return "rgba(107,114,128,0.5)";
+        if(m<=2) return "rgba(220,38,38,0.7)";
+        if(m<=3.5) return "rgba(234,179,8,0.7)";
+        return "rgba(34,197,94,0.7)";
+      });
+      grafico.data.labels = labels.map(l=>{
+        const media = medias[l] ? medias[l].toFixed(1) : "0.0";
+        const qtd = count[l] || 0;
+        return `${l} (${media} • ${qtd})`;
+      });
+      grafico.update();
+    }
+
+    // --- Enviar dados ---
+    document.getElementById("form360").addEventListener("submit", async function(e){
+      e.preventDefault();
+      const dados = Object.fromEntries(new FormData(this).entries());
+      await addDoc(collection(db,"respostas"), dados);
+      alert("✅ Avaliação registrada!");
+      this.reset(); secaoColegas.style.display="none";
+      atualizarGrafico();
+    });
+
+    document.getElementById("btnAtualizar").addEventListener("click", atualizarGrafico);
+
+    // --- Exportar CSV ---
+    async function exportarCSV() {
+      const snap = await getDocs(collection(db,"respostas"));
+      const docs = snap.docs.map(d => d.data());
+      if (!docs.length) { alert("Nenhuma resposta para exportar ainda."); return; }
+
+      const headers = [...new Set(docs.flatMap(d => Object.keys(d)))];
+      const linhas = [
+        headers.join(","),
+        ...docs.map(d => headers.map(h => JSON.stringify(d[h] || "")).join(","))
+      ];
+      const csv = linhas.join("\n");
+      const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "avaliacoes360.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    document.getElementById("btnExportar").addEventListener("click", exportarCSV);
+
+    atualizarGrafico();
+  </script>
 </body>
-
 </html>
+
+
